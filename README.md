@@ -15,9 +15,12 @@ Soon...
 
 ## Sub modules
 :computer: [Репозиторий для веб-приложения](https://github.com/fpmi-hci/proekt12a-web-automati)  
+(...)
+
 :iphone: [Репозиторий для мобильного приложения](https://github.com/fpmi-hci/proekt12a-mobile-automati)  
+(...)
 
 ## Contributing
-Кукса Андрей  
-Мигас Злата  
-Белицкий Евгений   
+Кукса Андрей - (...)  
+Мигас Злата - (...)  
+Белицкий Евгений - (...)   
