@@ -1,4 +1,4 @@
 remote_theme: pages-themes/cayman@v0.2.0
 plugins:
 - jekyll-remote-theme
-title: [<img src="https://cdn-icons-png.flaticon.com/512/3839/3839819.png" alt="icon" width="30"/> Книжный онлайн-магазин]
+title: [Книжный онлайн-магазин]
