@@ -1,4 +1,4 @@
-# Книжный онлайн-магазин
+# <img src="https://cdn-icons-png.flaticon.com/512/3839/3839819.png" alt="icon" width="30"/> Книжный онлайн-магазин
 
 ## Description 
 Открытая платформа для:
@@ -14,9 +14,10 @@
 Soon...
 
 ## Sub modules
-Soon...
+:computer: [Репозиторий для веб-приложения](https://github.com/fpmi-hci/proekt12a-web-automati)  
+:iphone: [Репозиторий для мобильного приложения](https://github.com/fpmi-hci/proekt12a-mobile-automati)  
 
 ## Contributing
-Мигас Злата  
 Кукса Андрей  
+Мигас Злата  
 Белицкий Евгений   
