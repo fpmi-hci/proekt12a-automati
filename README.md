@@ -1,4 +1,4 @@
-# <img src="https://cdn-icons-png.flaticon.com/512/3839/3839819.png" alt="icon" width="30"/> Книжный онлайн-магазин
+# <img src="https://cdn-icons-png.flaticon.com/512/3839/3839819.png" alt="icon" width="30"/> Онлайн-магазин электронных книг
 
 ## Description 
 Открытая платформа для:
