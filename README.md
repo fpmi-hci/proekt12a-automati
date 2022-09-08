@@ -19,6 +19,7 @@ Soon...
 :iphone: [Репозиторий для мобильного приложения](https://github.com/fpmi-hci/proekt12a-mobile-automati)  
 (...)
 
+
 ## Contributing
 Кукса Андрей - (...)  
 Мигас Злата - (...)  
