@@ -16,13 +16,11 @@ Soon...
 
 ## Sub modules
 :computer: [Репозиторий для веб-приложения](https://github.com/fpmi-hci/proekt12a-web-automati)  
-(...)
 
 :iphone: [Репозиторий для мобильного приложения](https://github.com/fpmi-hci/proekt12a-mobile-automati)  
-(...)
 
 
 ## Contributing
-Мигас Злата - Team Leader, Android-разработчик. 
-Кукса Андрей - Backend-разработчик.
-Белицкий Евгений - Web-разработчик.
+Мигас Злата - Team Leader, Android-разработчик.  
+Кукса Андрей - Backend-разработчик.  
+Белицкий Евгений - Web-разработчик.  
