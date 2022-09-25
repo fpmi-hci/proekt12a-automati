@@ -49,7 +49,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<Genre> genres;
 
-    @OneToMany(mappedBy = "comment")
-    @JoinTable
+    @OneToMany(mappedBy = "book")
     private List<Comment> comments;
 }

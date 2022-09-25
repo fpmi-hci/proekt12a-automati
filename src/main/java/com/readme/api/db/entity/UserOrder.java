@@ -11,14 +11,15 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
-public class Order {
+@Table(name = "user_order")
+public class UserOrder {
 
     @Id
     @Column(name = "id")
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @ManyToMany
