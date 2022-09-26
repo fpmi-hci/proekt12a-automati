@@ -1,2 +1,4 @@
 ReadmeBackend.iml
 /.idea/
+*.class
+/target/

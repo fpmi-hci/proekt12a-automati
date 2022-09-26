@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Data
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     private long id;
 

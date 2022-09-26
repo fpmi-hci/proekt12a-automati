@@ -9,6 +9,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,18 +42,21 @@ public class BookController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Book> addBook(@RequestBody BookRequestDto book) {
         Book newBook = bookService.addBook(book);
         return new ResponseEntity<>(newBook, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Book> deleteBook(@PathParam("id") long id) {
         Book deletedBook = bookService.deleteBook(id);
         return new ResponseEntity<>(deletedBook, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Book> updateBook(@PathParam("id") long id, BookRequestDto book) {
         Book updatedBook = bookService.updateBook(id, book);
         return new ResponseEntity<>(updatedBook, HttpStatus.OK);
