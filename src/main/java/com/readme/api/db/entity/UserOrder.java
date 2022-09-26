@@ -20,7 +20,7 @@ import java.util.List;
 public class UserOrder {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     private long id;
 

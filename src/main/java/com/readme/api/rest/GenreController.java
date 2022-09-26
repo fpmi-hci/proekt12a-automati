@@ -5,6 +5,7 @@ import com.readme.api.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,12 +35,14 @@ public class GenreController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
         Genre newGenre = genreService.saveOrUpdateGenre(genre);
         return new ResponseEntity<>(newGenre, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Genre> updateGenre(@PathParam("id") long id, Genre genre) {
         Genre updatedGenre = genreService.updateGenre(id, genre);
         return new ResponseEntity<>(updatedGenre, HttpStatus.OK);

@@ -5,6 +5,8 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +20,7 @@ import javax.validation.constraints.Size;
 @Data
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id")
     private long id;
 
@@ -29,13 +31,14 @@ public class User {
 
     @Size(min = 6, message = "Password should contain than 5 symbols")
     @Column(name = "password")
-    private String encodedPassword;
+    private String password;
 
-    @Column(name = "status")
-    private UserStatus status;
+    @Column(name = "is_blocked")
+    private boolean isBlocked;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(name = "iconPath")
     private String iconPath;

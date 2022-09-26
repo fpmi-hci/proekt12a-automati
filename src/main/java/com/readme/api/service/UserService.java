@@ -2,6 +2,7 @@ package com.readme.api.service;
 
 
 import com.readme.api.db.entity.User;
+import com.readme.api.db.entity.UserRole;
 import com.readme.api.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class UserService {
         if (userByEmail.isPresent()) {
             throw new UserAlreadyExistsException(email);
         }
+        user.setRole(UserRole.USER);
         return userRepository.save(user);
     }
 
@@ -31,7 +33,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findById(long id){
-        return userRepository.getReferenceById(id);
+    public User findById(long id) {
+        return userRepository.getById(id);
+    }
+
+    public User findByName(String username) {
+        Optional<User> optionalUser = userRepository.findByName(username);
+        return optionalUser.orElseThrow(UserNotFoundException::new);
     }
 }

@@ -5,6 +5,7 @@ import com.readme.api.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,12 +35,14 @@ public class AuthorController {
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         Author newAuthor = authorService.saveOrUpdateAuthor(author);
         return new ResponseEntity<>(newAuthor, HttpStatus.ACCEPTED);
     }
-    
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Author> updateAuthor(@PathParam("id") long id, Author author) {
         Author updatedAuthor = authorService.updateAuthor(id, author);
