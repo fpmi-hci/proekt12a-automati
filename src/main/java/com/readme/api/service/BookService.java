@@ -35,15 +35,6 @@ public class BookService {
     @Transactional
     public Book addBook(BookRequestDto requestBook) {
         Book book = bookMapper.requestToEntity(requestBook);
-//        List<Author> authors = book.getAuthors();
-//        List<Author> updatedAuthors = authors.stream()
-//                .map(author -> authorService.findById(author))
-//                .collect(Collectors.toList());
-//        List<Genre> genres = book.getGenres();
-//        List<Genre> updatedGenres = genres.stream()
-//                .map(genre -> genreService.saveOrUpdateGenre(genre))
-//                .collect(Collectors.toList());
-
         return bookRepository.save(book);
     }
 
@@ -73,7 +64,7 @@ public class BookService {
     }
 
     public Book findById(long id) {
-        return bookRepository.getReferenceById(id);
+        return bookRepository.getById(id);
     }
 
     public List<Book> findBooks(SearchParams searchParams) {
