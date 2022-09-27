@@ -23,7 +23,6 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<UserOrder> addUserOrder(@RequestBody UserOrderRequestDto comment) {
         UserOrder addedUserOrder = orderService.addOrder(comment);
         return new ResponseEntity<>(addedUserOrder, HttpStatus.ACCEPTED);

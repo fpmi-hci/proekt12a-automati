@@ -4,6 +4,8 @@ package com.readme.api.service;
 import com.readme.api.db.entity.User;
 import com.readme.api.db.entity.UserRole;
 import com.readme.api.db.repository.UserRepository;
+import com.readme.api.service.exception.UserAlreadyExistsException;
+import com.readme.api.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,6 @@ public class UserService {
 
     public User findByName(String username) {
         Optional<User> optionalUser = userRepository.findByName(username);
-        return optionalUser.orElseThrow(UserNotFoundException::new);
+        return optionalUser.orElseThrow(() -> new UserNotFoundException(username));
     }
 }
