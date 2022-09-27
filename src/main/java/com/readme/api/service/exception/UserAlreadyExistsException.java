@@ -1,4 +1,4 @@
-package com.readme.api.service;
+package com.readme.api.service.exception;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

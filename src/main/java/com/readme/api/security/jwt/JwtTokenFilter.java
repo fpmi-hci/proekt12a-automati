@@ -3,6 +3,7 @@ package com.readme.api.security.jwt;
 
 import com.readme.api.security.UserAuthException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
