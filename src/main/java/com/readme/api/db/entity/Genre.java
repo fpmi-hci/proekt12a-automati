@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "genre")
@@ -21,5 +22,6 @@ public class Genre {
     private long id;
 
     @Column(name = "name")
+    @NotBlank(message = "Genre name should be not empty")
     private String name;
 }

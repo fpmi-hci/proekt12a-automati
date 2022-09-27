@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
@@ -36,14 +37,14 @@ public class GenreController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Genre> addGenre(@RequestBody Genre genre) {
+    public ResponseEntity<Genre> addGenre(@RequestBody @Valid Genre genre) {
         Genre newGenre = genreService.saveOrUpdateGenre(genre);
         return new ResponseEntity<>(newGenre, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Genre> updateGenre(@PathParam("id") long id, Genre genre) {
+    public ResponseEntity<Genre> updateGenre(@PathParam("id") long id, @Valid  Genre genre) {
         Genre updatedGenre = genreService.updateGenre(id, genre);
         return new ResponseEntity<>(updatedGenre, HttpStatus.OK);
     }
