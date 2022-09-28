@@ -1,8 +1,7 @@
 package com.readme.api.service;
 
-import com.readme.api.db.entity.Author;
 import com.readme.api.db.entity.Book;
-import com.readme.api.db.entity.Genre;
+import com.readme.api.db.entity.User;
 import com.readme.api.db.repository.BookRepository;
 import com.readme.api.db.repository.BookSearchRepository;
 import com.readme.api.mapper.BookMapper;
@@ -15,18 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class BookService {
-    private static final int DEFAULT_PAGE_SIZE = 100;
-    private static final int DEFAULT_PAGE = 0;
 
     private BookRepository bookRepository;
     private BookSearchRepository bookSearchRepository;
 
     private BookMapper bookMapper;
+
+    private UserService userService;
+    private OrderService orderService;
 
     public List<Book> findAll() {
         return bookRepository.findAll();
@@ -69,5 +68,10 @@ public class BookService {
 
     public List<Book> findBooks(SearchParams searchParams) {
         return bookSearchRepository.search(searchParams);
+    }
+
+    public List<Book> findPurchasedBooksForCurrentUser(String currentUserToken) {
+        User user = userService.findUserByToken(currentUserToken);
+        return orderService.findUserBooks(user);
     }
 }

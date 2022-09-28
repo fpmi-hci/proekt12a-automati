@@ -4,7 +4,6 @@ import com.readme.api.db.entity.Book;
 import com.readme.api.db.entity.Cart;
 import com.readme.api.db.entity.User;
 import com.readme.api.db.repository.CartRepository;
-import com.readme.api.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,17 +15,13 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CartService {
-
-    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
-
     private final BookService bookService;
     private final CartRepository cartRepository;
 
     @Transactional
     public Cart getCartForCurrentUser(String currentUserToken) {
-        String login = jwtTokenProvider.getLogin(currentUserToken);
-        User currentUser = userService.findByName(login);
+        User currentUser = userService.findUserByToken(currentUserToken);
         Optional<Cart> cartByUser = cartRepository.findByUserId(currentUser.getId());
         if (cartByUser.isEmpty()) {
             Cart cart = new Cart();
