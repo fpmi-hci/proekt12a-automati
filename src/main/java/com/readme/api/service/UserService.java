@@ -4,19 +4,21 @@ package com.readme.api.service;
 import com.readme.api.db.entity.User;
 import com.readme.api.db.entity.UserRole;
 import com.readme.api.db.repository.UserRepository;
+import com.readme.api.security.jwt.JwtTokenProvider;
 import com.readme.api.service.exception.UserAlreadyExistsException;
 import com.readme.api.service.exception.UserNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService {
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public User register(User user) {
@@ -42,5 +44,10 @@ public class UserService {
     public User findByName(String username) {
         Optional<User> optionalUser = userRepository.findByName(username);
         return optionalUser.orElseThrow(() -> new UserNotFoundException(username));
+    }
+
+    public User findUserByToken(String currentUserToken) {
+        String login = jwtTokenProvider.getLogin(currentUserToken);
+        return findByName(login);
     }
 }
