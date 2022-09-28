@@ -46,6 +46,6 @@ public class GenreController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Genre> updateGenre(@PathParam("id") long id, @Valid  Genre genre) {
         Genre updatedGenre = genreService.updateGenre(id, genre);
-        return new ResponseEntity<>(updatedGenre, HttpStatus.OK);
+        return new ResponseEntity<>(updatedGenre, HttpStatus.ACCEPTED);
     }
 }
