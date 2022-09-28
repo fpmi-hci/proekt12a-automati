@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 @RestController
@@ -23,14 +24,13 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<UserOrder> addUserOrder(@RequestBody UserOrderRequestDto comment) {
+    public ResponseEntity<UserOrder> addUserOrder(@RequestBody @Valid UserOrderRequestDto comment) {
         UserOrder addedUserOrder = orderService.addOrder(comment);
         return new ResponseEntity<>(addedUserOrder, HttpStatus.ACCEPTED);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<UserOrder> updateOrder(@RequestBody UserOrderRequestDto userOrder, @PathParam("id") long id){
+    public ResponseEntity<UserOrder> updateOrder(@RequestBody  @Valid UserOrderRequestDto userOrder, @PathParam("id") long id){
         UserOrder updateOrder = orderService.updateOrder(id, userOrder);
         return new ResponseEntity<>(updateOrder, HttpStatus.ACCEPTED);
     }
