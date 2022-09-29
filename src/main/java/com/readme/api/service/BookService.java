@@ -24,9 +24,6 @@ public class BookService {
 
     private BookMapper bookMapper;
 
-    private UserService userService;
-    private OrderService orderService;
-
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
@@ -68,10 +65,5 @@ public class BookService {
 
     public List<Book> findBooks(SearchParams searchParams) {
         return bookSearchRepository.search(searchParams);
-    }
-
-    public List<Book> findPurchasedBooksForCurrentUser(String currentUserToken) {
-        User user = userService.findUserByToken(currentUserToken);
-        return orderService.findUserBooks(user);
     }
 }
