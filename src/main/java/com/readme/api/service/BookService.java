@@ -37,7 +37,7 @@ public class BookService {
     @Transactional
     public Book deleteBook(long id) {
         Optional<Book> optionalBook = bookRepository.findById(id);
-        if (optionalBook.isEmpty()) {
+        if (!optionalBook.isPresent()) {
             return new Book();
         }
         Book bookToDelete = optionalBook.get();

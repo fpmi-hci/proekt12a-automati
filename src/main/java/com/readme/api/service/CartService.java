@@ -23,7 +23,7 @@ public class CartService {
     public Cart getCartForCurrentUser(String currentUserToken) {
         User currentUser = userService.findUserByToken(currentUserToken);
         Optional<Cart> cartByUser = cartRepository.findByUserId(currentUser.getId());
-        if (cartByUser.isEmpty()) {
+        if (!cartByUser.isPresent()) {
             Cart cart = new Cart();
             cart.setUser(currentUser);
             return cartRepository.save(cart);
