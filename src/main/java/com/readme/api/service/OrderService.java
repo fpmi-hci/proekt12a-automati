@@ -18,6 +18,8 @@ public class OrderService {
     private OrderRepository orderRepository;
     private UserOrderMapper orderMapper;
 
+    private UserService userService;
+
     @Transactional
     public UserOrder addOrder(UserOrderRequestDto request) {
         UserOrder order = orderMapper.requestToEntity(request);
@@ -29,6 +31,11 @@ public class OrderService {
         UserOrder order = orderMapper.requestToEntity(request);
         order.setId(id);
         return orderRepository.save(order);
+    }
+
+    public List<Book> findPurchasedBooksForCurrentUser(String currentUserToken) {
+        User user = userService.findUserByToken(currentUserToken);
+        return findUserBooks(user);
     }
 
     public List<Book> findUserBooks(User user) {
