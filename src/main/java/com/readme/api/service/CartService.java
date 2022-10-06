@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,7 +59,8 @@ public class CartService {
     @Transactional
     public Cart addToCart(long bookId, String currentUserToken) {
         Cart cartForCurrentUser = getCartForCurrentUser(currentUserToken);
-        List<Book> books = cartForCurrentUser.getBooks();
+        List<Book> books;
+        books = cartForCurrentUser.getBooks();
         Book addedBook = bookService.findById(bookId);
         books.add(addedBook);
         cartRepository.save(cartForCurrentUser);
