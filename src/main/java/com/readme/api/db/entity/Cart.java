@@ -1,6 +1,7 @@
 package com.readme.api.db.entity;
 
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,4 +36,11 @@ public class Cart {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books;
+
+    public List<Book> getBooks() {
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        return books;
+    }
 }
