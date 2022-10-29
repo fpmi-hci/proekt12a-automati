@@ -28,6 +28,5 @@ public abstract class CommentMapper {
             @Mapping(target = "rate", source = "rate"),
             @Mapping(target = "book", expression = "java(bookService.findById(comment.getBookId()))"),
     })
-    //TODO: add current user
     public abstract Comment requestToEntity(CommentRequestDto comment);
 }

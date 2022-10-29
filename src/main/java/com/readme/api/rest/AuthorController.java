@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -44,8 +45,15 @@ public class AuthorController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathParam("id") long id, Author author) {
+    public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, Author author) {
         Author updatedAuthor = authorService.updateAuthor(id, author);
         return new ResponseEntity<>(updatedAuthor, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Author> deleteAuthor(@PathVariable("id") long id){
+        Author deletedAuthor = authorService.deleteAuthor(id);
+        return new ResponseEntity<>(deletedAuthor, HttpStatus.ACCEPTED);
     }
 }

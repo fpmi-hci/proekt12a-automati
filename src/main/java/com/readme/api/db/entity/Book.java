@@ -1,7 +1,8 @@
 package com.readme.api.db.entity;
 
-import lombok.Data;
-import org.hibernate.annotations.Fetch;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,7 +20,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "book")
-@Data
+@Getter
+@Setter
 public class Book {
 
     @Id
@@ -40,11 +42,8 @@ public class Book {
     private String bookFile;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book_authors",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "books")
+    @JsonIgnore
     private List<Author> authors;
 
 
@@ -56,5 +55,6 @@ public class Book {
     private List<Genre> genres;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Comment> comments;
 }

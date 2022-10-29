@@ -4,11 +4,12 @@ import com.readme.api.db.entity.Book;
 import com.readme.api.db.entity.Cart;
 import com.readme.api.db.entity.User;
 import com.readme.api.db.repository.CartRepository;
+import com.readme.api.mapper.CartMapper;
+import com.readme.api.rest.dto.CartResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,60 +21,67 @@ public class CartService {
     private final BookService bookService;
     private final CartRepository cartRepository;
 
+    private final CartMapper cartMapper;
+
     @Transactional
-    public Cart getCartForCurrentUser(String currentUserToken) {
-        User currentUser = userService.findUserByToken(currentUserToken);
-        Optional<Cart> cartByUser = cartRepository.findByUserId(currentUser.getId());
-        if (!cartByUser.isPresent()) {
-            Cart cart = new Cart();
-            cart.setUser(currentUser);
-            return cartRepository.save(cart);
-        }
-        return cartByUser.get();
+    public CartResponseDto getCartForCurrentUser(String currentUserToken) {
+        return cartMapper.entityToResponse(getCart(currentUserToken));
     }
 
     @Transactional
-    public Cart removeFromCart(long bookId, String currentUserToken) {
-        Cart cartForCurrentUser = getCartForCurrentUser(currentUserToken);
+    public CartResponseDto removeFromCart(long bookId, String currentUserToken) {
+        Cart cartForCurrentUser = getCart(currentUserToken);
         List<Book> books = cartForCurrentUser.getBooks();
         List<Book> filteredBooks = books.stream()
                 .filter(book -> book.getId() != bookId)
                 .collect(Collectors.toList());
         cartForCurrentUser.setBooks(filteredBooks);
         cartRepository.save(cartForCurrentUser);
-        return cartForCurrentUser;
+        return cartMapper.entityToResponse(cartForCurrentUser);
     }
 
     @Transactional
-    public Cart removeFromCartBatch(List<Long> bookIds, String currentUserToken) {
-        Cart cartForCurrentUser = getCartForCurrentUser(currentUserToken);
+    public CartResponseDto removeFromCartBatch(List<Long> bookIds, String currentUserToken) {
+        Cart cartForCurrentUser = getCart(currentUserToken);
         List<Book> books = cartForCurrentUser.getBooks();
         List<Book> filteredBooks = books.stream()
                 .filter(book -> !bookIds.contains(book.getId()))
                 .collect(Collectors.toList());
         cartForCurrentUser.setBooks(filteredBooks);
         cartRepository.save(cartForCurrentUser);
-        return cartForCurrentUser;
+        return cartMapper.entityToResponse(cartForCurrentUser);
     }
 
     @Transactional
-    public Cart addToCart(long bookId, String currentUserToken) {
-        Cart cartForCurrentUser = getCartForCurrentUser(currentUserToken);
+    public CartResponseDto addToCart(long bookId, String currentUserToken) {
+        Cart cartForCurrentUser = getCart(currentUserToken);
         List<Book> books;
         books = cartForCurrentUser.getBooks();
         Book addedBook = bookService.findById(bookId);
         books.add(addedBook);
         cartRepository.save(cartForCurrentUser);
-        return cartForCurrentUser;
+        return cartMapper.entityToResponse(cartForCurrentUser);
     }
 
     @Transactional
-    public Cart addToCartBatch(List<Long> bookIds, String currentUserToken) {
-        Cart cartForCurrentUser = getCartForCurrentUser(currentUserToken);
+    public CartResponseDto addToCartBatch(List<Long> bookIds, String currentUserToken) {
+        Cart cartForCurrentUser = getCart(currentUserToken);
         List<Book> books = cartForCurrentUser.getBooks();
         List<Book> addedBooks = bookService.findByIdList(bookIds);
         books.addAll(addedBooks);
         cartRepository.save(cartForCurrentUser);
-        return cartForCurrentUser;
+        return cartMapper.entityToResponse(cartForCurrentUser);
+    }
+
+    private Cart getCart(String currentUserToken) {
+        User currentUser = userService.findUserByToken(currentUserToken);
+        Optional<Cart> cartByUser = cartRepository.findByUserId(currentUser.getId());
+
+        if (!cartByUser.isPresent()) {
+            Cart cart = new Cart();
+            cart.setUser(currentUser);
+            return cartRepository.save(cart);
+        }
+        return cartByUser.get();
     }
 }
