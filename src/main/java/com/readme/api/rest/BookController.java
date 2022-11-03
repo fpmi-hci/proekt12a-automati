@@ -1,15 +1,11 @@
 package com.readme.api.rest;
 
 
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.readme.api.db.entity.Book;
 import com.readme.api.rest.dto.BookRequestDto;
-import com.readme.api.s3.AmazonS3Client;
-import com.readme.api.s3.S3Info;
 import com.readme.api.service.BookService;
 import com.readme.api.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -90,7 +86,7 @@ public class BookController {
 
     @GetMapping("/{id}/content")
     public ResponseEntity<?> getBookContent(@PathVariable("id") long id, @RequestHeader("Authorization") String currentUserToken) throws Exception {
-        bookService.downloadBookContent(id, currentUserToken);
+        bookService.getBookContent(id, currentUserToken);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
