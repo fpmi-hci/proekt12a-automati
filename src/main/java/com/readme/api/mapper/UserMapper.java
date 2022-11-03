@@ -1,6 +1,7 @@
 package com.readme.api.mapper;
 
 import com.readme.api.db.entity.User;
+import com.readme.api.rest.dto.UserDto;
 import com.readme.api.security.SecurityUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +17,14 @@ public interface UserMapper {
             @Mapping(target = "authorities", expression = "java(user.getRole().authorities())")
     })
     SecurityUser entityToSecurityUser(User user);
+
+    @Mappings({
+            @Mapping(target = "id", source = "id"),
+            @Mapping(target = "email", source = "email"),
+            @Mapping(target = "role", source = "role"),
+            @Mapping(target = "iconPath", source = "iconPath"),
+            @Mapping(target = "name", source = "name")
+    })
+    UserDto entityToRequest(User user);
 
 }
