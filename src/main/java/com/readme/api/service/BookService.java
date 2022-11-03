@@ -2,7 +2,6 @@ package com.readme.api.service;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
-import com.readme.api.db.entity.Author;
 import com.readme.api.db.entity.Book;
 import com.readme.api.db.entity.User;
 import com.readme.api.db.repository.BookRepository;
@@ -79,7 +78,7 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public void downloadBookContent(long bookId, String currentUserToken) throws IOException {
+    public void getBookContent(long bookId, String currentUserToken) throws IOException {
         Book book = findById(bookId);
         User currentUser = userService.findUserByToken(currentUserToken);
         if (bookNotPurchasedByUser(book, currentUser)) {
@@ -112,7 +111,7 @@ public class BookService {
     }
 
     private boolean bookNotPurchasedByUser(Book book, User currentUser) {
-        List<Book> userBooks = orderRepository.findByUserId(currentUser.getId());
+        List<Book> userBooks = orderRepository.findByUserId(currentUser.getId()).getBooks();
         return userBooks.contains(book);
     }
 

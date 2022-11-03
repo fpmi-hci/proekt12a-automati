@@ -39,6 +39,6 @@ public class OrderService {
     }
 
     public List<Book> findUserBooks(User user) {
-        return orderRepository.findByUserId(user.getId());
+        return orderRepository.findByUserId(user.getId()).getBooks();
     }
 }
