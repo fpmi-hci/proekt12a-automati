@@ -2,6 +2,7 @@ package com.readme.api.rest;
 
 
 import com.readme.api.db.entity.Book;
+import com.readme.api.rest.dto.BookContent;
 import com.readme.api.rest.dto.BookRequestDto;
 import com.readme.api.service.BookService;
 import com.readme.api.service.OrderService;
@@ -86,7 +87,7 @@ public class BookController {
 
     @GetMapping("/{id}/content")
     public ResponseEntity<?> getBookContent(@PathVariable("id") long id, @RequestHeader("Authorization") String currentUserToken) throws Exception {
-        bookService.getBookContent(id, currentUserToken);
-        return new ResponseEntity<>(HttpStatus.OK);
+        BookContent bookContent = bookService.getBookContent(id, currentUserToken);
+        return new ResponseEntity<>(bookContent, HttpStatus.OK);
     }
 }
