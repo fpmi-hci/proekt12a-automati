@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +24,14 @@ public class OrderService {
     @Transactional
     public UserOrder addOrder(UserOrderRequestDto request) {
         UserOrder order = orderMapper.requestToEntity(request);
+        Optional<UserOrder> optionalOrder = orderRepository.findById(request.getUserId());
+        if(optionalOrder.isPresent()){
+            UserOrder updatedOrder = optionalOrder.get();
+            List<Book> newBooks = order.getBooks();
+            List<Book> oldBooks = updatedOrder.getBooks();
+            oldBooks.addAll(newBooks);
+            return orderRepository.save(updatedOrder);
+        }
         return orderRepository.save(order);
     }
 
