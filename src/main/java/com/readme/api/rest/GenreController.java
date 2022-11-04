@@ -44,7 +44,7 @@ public class GenreController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<Genre> updateGenre(@PathVariable("id") long id, @Valid  Genre genre) {
+    public ResponseEntity<Genre> updateGenre(@PathVariable("id") long id, @RequestBody @Valid  Genre genre) {
         Genre updatedGenre = genreService.updateGenre(id, genre);
         return new ResponseEntity<>(updatedGenre, HttpStatus.ACCEPTED);
     }

@@ -45,7 +45,7 @@ public class AuthorController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, Author author) {
+    public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
         Author updatedAuthor = authorService.updateAuthor(id, author);
         return new ResponseEntity<>(updatedAuthor, HttpStatus.OK);
     }
