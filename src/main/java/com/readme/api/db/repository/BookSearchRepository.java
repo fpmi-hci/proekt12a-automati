@@ -8,14 +8,23 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
-public class BookSearchRepository extends AbstractSearchRepository<Book> {
-    private static final String TABLE_NAME = "book";
+public class BookSearchRepository {
+    @Autowired
+    private BookDynamicQueryBuilder bookDynamicQueryBuilder;
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Override
-    public String getTableName() {
-        return TABLE_NAME;
+    public List<Book> search(SearchParams searchParams) {
+        String sql = bookDynamicQueryBuilder.buildSqlSearch(searchParams);
+        return (List<Book>) entityManager.createNativeQuery(sql, Book.class)
+                .getResultList()
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
+
 }
