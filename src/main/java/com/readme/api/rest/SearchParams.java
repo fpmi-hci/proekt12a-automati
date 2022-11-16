@@ -10,7 +10,7 @@ public class SearchParams {
 
     private int pageNumber = 0;
 
-    private int pageSize = 100;
+    private int pageSize = 1000;
 
     private List<SearchEntry> bookSearchParams;
 
@@ -20,7 +20,7 @@ public class SearchParams {
 
     private String sortDirection = "asc";
 
-    private String sortField;
+    private String sortField = "id";
 
     private String sortTable = "book";
 
