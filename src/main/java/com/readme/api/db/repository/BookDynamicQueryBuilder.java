@@ -56,9 +56,7 @@ public class BookDynamicQueryBuilder {
         String tablePrefix = searchParams.getSortTable().charAt(0) + ".";
         String sortField = tablePrefix + searchParams.getSortField();
         String sortDirection = searchParams.getSortDirection();
-        if (sortField != null) {
-            sql.append(String.format(SORT_PART, sortField, sortDirection));
-        }
+        sql.append(String.format(SORT_PART, sortField, sortDirection));
         int pageNumber = searchParams.getPageNumber();
         int pageSize = searchParams.getPageSize();
         sql.append(String.format(PAGING_PART, pageSize, pageNumber * pageSize));
