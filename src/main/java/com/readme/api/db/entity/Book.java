@@ -52,6 +52,7 @@ public class Book {
             name = "book_genres",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<Genre> genres;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
