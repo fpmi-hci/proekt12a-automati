@@ -1,6 +1,7 @@
 package com.readme.api.db.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ public class Author {
     private String fullName;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "author_id"),
