@@ -1,5 +1,6 @@
 package com.readme.api.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private Book book;
 
     @Column(name = "description")
