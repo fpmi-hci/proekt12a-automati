@@ -15,7 +15,7 @@ public class BookRequestDto {
 
     private BigDecimal cost;
 
-    private String bookFile;
+    private String imageUrl;
 
     private List<Long> authors;
 

@@ -30,7 +30,7 @@ public abstract class BookMapper {
             @Mapping(target = "title", source = "title"),
             @Mapping(target = "description", source = "description"),
             @Mapping(target = "cost", source = "cost"),
-            @Mapping(target = "bookFile", source = "bookFile"),
+            @Mapping(target = "imageUrl", source = "imageUrl"),
             @Mapping(target = "authors",
                     expression = "java(authorService.findByIdList(book.getAuthors()))"),
             @Mapping(target = "genres",

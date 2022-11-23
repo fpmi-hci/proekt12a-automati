@@ -21,7 +21,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
     private final AuthService authService;
 
 
@@ -32,11 +31,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody @Valid User user) {
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        User registeredUser = userService.register(user);
-        return new ResponseEntity<>(registeredUser, HttpStatus.CREATED);
+    public ResponseEntity<User> register(@RequestBody @Valid AuthRequestDto authRequestDto) {
+        User user = authService.buildNewUser(authRequestDto);
+        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
-
-
 }

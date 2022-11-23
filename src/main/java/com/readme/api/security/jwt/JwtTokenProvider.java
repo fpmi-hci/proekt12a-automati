@@ -36,8 +36,8 @@ public class JwtTokenProvider {
     @Value("${jwt.header}")
     private String authorizationHeader;
 
-    @Value("${jwt.expiration-minutes}")
-    private int expirationMinutes;
+    @Value("${jwt.expiration}")
+    private int expiration;
 
     @PostConstruct
     protected void init() {
@@ -48,7 +48,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(login);
         claims.put("role", userRole);
         LocalDateTime created = LocalDateTime.now();
-        LocalDateTime valid = created.plusMinutes(expirationMinutes);
+        LocalDateTime valid = created.plusYears(expiration);
 
         return Jwts.builder()
                 .setClaims(claims)
