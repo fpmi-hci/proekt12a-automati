@@ -2,7 +2,10 @@ package com.readme.api.db.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +21,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "application_user")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 public class User {
     @Id

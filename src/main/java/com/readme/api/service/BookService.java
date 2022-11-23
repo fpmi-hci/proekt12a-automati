@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +75,24 @@ public class BookService {
     public Book updateBook(long id, BookRequestDto requestBook) {
         Book book = bookMapper.requestToEntity(requestBook);
         book.setId(id);
-        return bookRepository.save(book);
+        Book bookToUpdate = findById(id);
+        BigDecimal cost = requestBook.getCost();
+        String title = requestBook.getTitle();
+        String description = requestBook.getDescription();
+        String imageUrl = requestBook.getImageUrl();
+        if (imageUrl != null) {
+            bookToUpdate.setImageUrl(imageUrl);
+        }
+        if (cost != null) {
+            bookToUpdate.setCost(cost);
+        }
+        if (title != null) {
+            bookToUpdate.setTitle(title);
+        }
+        if (description != null) {
+            bookToUpdate.setDescription(description);
+        }
+        return bookRepository.save(bookToUpdate);
     }
 
     @Transactional

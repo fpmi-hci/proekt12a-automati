@@ -1,6 +1,7 @@
 package com.readme.api.service;
 
 import com.readme.api.db.entity.User;
+import com.readme.api.db.entity.UserRole;
 import com.readme.api.rest.dto.AuthRequestDto;
 import com.readme.api.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
@@ -17,23 +18,40 @@ import java.util.Map;
 @AllArgsConstructor
 public class AuthService {
 
+    private static final String NAME_FROM_EMAIL_END = "@";
+
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
     public Map<String, String> authenticate(AuthRequestDto authDto) {
-        String login = authDto.getName();
+        String email = authDto.getEmail();
         String password = authDto.getPassword();
         String passwordHash = DigestUtils.md5DigestAsHex(password.getBytes());
-        AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(login, passwordHash);
+        AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, passwordHash);
         authenticationManager.authenticate(authentication);
-        User user = userService.findByName(login);
-        String token = jwtTokenProvider.createToken(login, user.getRole());
+        User user = userService.findByEmail(email);
+        String token = jwtTokenProvider.createToken(email, user.getRole());
         Map<String, String> tokenAndLogin = new HashMap<>();
-        tokenAndLogin.put("login", authDto.getName());
+        tokenAndLogin.put("login", authDto.getEmail());
         tokenAndLogin.put("token", token);
         return tokenAndLogin;
     }
 
 
+    public User buildNewUser(AuthRequestDto authRequestDto) {
+        String name = getFromEmail(authRequestDto.getEmail());
+        User newUser = User.builder()
+                .name(name)
+                .email(authRequestDto.getEmail())
+                .role(UserRole.USER)
+                .isBlocked(false)
+                .password(DigestUtils.md5DigestAsHex(authRequestDto.getPassword().getBytes()))
+                .build();
+        return userService.register(newUser);
+    }
+
+    private String getFromEmail(String email) {
+        return email.split(NAME_FROM_EMAIL_END)[0];
+    }
 }

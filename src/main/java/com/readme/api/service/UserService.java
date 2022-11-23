@@ -51,7 +51,7 @@ public class UserService {
 
     public User findUserByToken(String currentUserToken) {
         String login = jwtTokenProvider.getLogin(currentUserToken);
-        return findByName(login);
+        return findByEmail(login);
     }
 
     public List<User> getAllUsers() {
@@ -83,5 +83,10 @@ public class UserService {
 
     private static boolean isAdminOrSelfUpdate(long userId, User currentUser) {
         return currentUser.getRole() == UserRole.ADMIN || (currentUser.getId() == userId);
+    }
+
+    public User findByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        return optionalUser.orElseThrow(() -> new UserNotFoundException(email));
     }
 }
