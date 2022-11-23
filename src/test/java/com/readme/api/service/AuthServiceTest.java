@@ -42,7 +42,7 @@ class AuthServiceTest {
         AuthRequestDto authRequestDto = new AuthRequestDto(LOGIN, PASSWORD);
         User testUser = new User();
         testUser.setRole(UserRole.USER);
-        when(userService.findByName(anyString())).thenReturn(testUser);
+        when(userService.findByEmail(anyString())).thenReturn(testUser);
         String token = "token";
         Map<String, String> expectedResult = new HashMap<>();
         expectedResult.put("login", LOGIN);
@@ -54,7 +54,7 @@ class AuthServiceTest {
         assertEquals(tokenAndLogin, expectedResult);
 
         verify(authenticationManager).authenticate(any());
-        verify(userService).findByName(LOGIN);
+        verify(userService).findByEmail(LOGIN);
         verify(jwtTokenProvider).createToken(LOGIN, UserRole.USER);
     }
 
