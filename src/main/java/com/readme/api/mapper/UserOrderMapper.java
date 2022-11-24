@@ -26,7 +26,6 @@ public abstract class UserOrderMapper {
 
     @Mappings({
             @Mapping(target = "id", source = "id"),
-            @Mapping(target = "user", expression = "java(userService.findById(order.getUserId()))"),
             @Mapping(target = "books", expression = "java(bookService.findByIdList(order.getBooks()))")
     })
     public abstract UserOrder requestToEntity(UserOrderRequestDto order);

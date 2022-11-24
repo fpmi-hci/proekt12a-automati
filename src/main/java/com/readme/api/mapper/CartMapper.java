@@ -29,8 +29,7 @@ public abstract class CartMapper {
 
     @Mappings({
             @Mapping(target = "id", source = "id"),
-            @Mapping(target = "books", source = "books"),
-            @Mapping(target = "user", expression = "java(userMapper.entityToRequest(cart.getUser()))")
+            @Mapping(target = "books", source = "books")
     })
     public abstract CartResponseDto entityToResponse(Cart cart);
 

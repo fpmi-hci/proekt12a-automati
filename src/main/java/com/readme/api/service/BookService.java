@@ -11,6 +11,7 @@ import com.readme.api.mapper.BookMapper;
 import com.readme.api.rest.SearchParams;
 import com.readme.api.rest.dto.BookContent;
 import com.readme.api.rest.dto.BookRequestDto;
+import com.readme.api.rest.dto.BookResponseDto;
 import com.readme.api.s3.AmazonS3Client;
 import com.readme.api.s3.S3Info;
 import com.readme.api.service.exception.BookContentAccessDeniedException;
@@ -23,8 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -38,7 +41,6 @@ public class BookService {
     private final BookMapper bookMapper;
     private final AmazonS3Client amazonS3Client;
     private final UserService userService;
-
     private final OrderRepository orderRepository;
 
     public List<Book> findAll() {
@@ -110,16 +112,25 @@ public class BookService {
     }
 
     @Transactional
-    public List<Book> findByIdList(List<Long> ids) {
+    public Set<Book> findByIdList(List<Long> ids) {
         if (ids == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
-        return bookRepository.findAllById(ids);
+        return new HashSet<>(bookRepository.findAllById(ids));
     }
 
     @Transactional
     public Book findById(long id) {
         return bookRepository.getById(id);
+    }
+
+    @Transactional
+    public BookResponseDto findByIdFull(long id, String currentUserToken) {
+        Book book = bookRepository.getById(id);
+        User userByToken = userService.findUserByToken(currentUserToken);
+        BookResponseDto bookResponseDto = bookMapper.entityToResponse(book);
+        bookResponseDto.setPurchasedByUser(bookPurchasedByUser(book, userByToken));
+        return bookResponseDto;
     }
 
     @Transactional
@@ -133,7 +144,7 @@ public class BookService {
     }
 
     private boolean bookPurchasedByUser(Book book, User currentUser) {
-        List<Book> userBooks = orderRepository.findByUserId(currentUser.getId()).getBooks();
+        Set<Book> userBooks = orderRepository.findByUserId(currentUser.getId()).get().getBooks();
         return userBooks.contains(book);
     }
 

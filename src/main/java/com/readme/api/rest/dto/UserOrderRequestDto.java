@@ -10,8 +10,6 @@ public class UserOrderRequestDto {
 
     private long id;
 
-    private long userId;
-
     @NotNull(message = "List of books in the order must be not null")
     private List<Long> books;
 }
