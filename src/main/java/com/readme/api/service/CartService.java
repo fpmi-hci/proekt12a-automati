@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +21,9 @@ public class CartService {
     private final UserService userService;
     private final BookService bookService;
     private final CartRepository cartRepository;
-
     private final CartMapper cartMapper;
+
+    private final OrderService orderService;
 
     @Transactional
     public CartResponseDto getCartForCurrentUser(String currentUserToken) {
@@ -31,10 +33,10 @@ public class CartService {
     @Transactional
     public CartResponseDto removeFromCart(long bookId, String currentUserToken) {
         Cart cartForCurrentUser = getCart(currentUserToken);
-        List<Book> books = cartForCurrentUser.getBooks();
-        List<Book> filteredBooks = books.stream()
+        Set<Book> books = cartForCurrentUser.getBooks();
+        Set<Book> filteredBooks = books.stream()
                 .filter(book -> book.getId() != bookId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         cartForCurrentUser.setBooks(filteredBooks);
         cartRepository.save(cartForCurrentUser);
         return cartMapper.entityToResponse(cartForCurrentUser);
@@ -43,10 +45,10 @@ public class CartService {
     @Transactional
     public CartResponseDto removeFromCartBatch(List<Long> bookIds, String currentUserToken) {
         Cart cartForCurrentUser = getCart(currentUserToken);
-        List<Book> books = cartForCurrentUser.getBooks();
-        List<Book> filteredBooks = books.stream()
+        Set<Book> books = cartForCurrentUser.getBooks();
+        Set<Book> filteredBooks = books.stream()
                 .filter(book -> !bookIds.contains(book.getId()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         cartForCurrentUser.setBooks(filteredBooks);
         cartRepository.save(cartForCurrentUser);
         return cartMapper.entityToResponse(cartForCurrentUser);
@@ -55,10 +57,11 @@ public class CartService {
     @Transactional
     public CartResponseDto addToCart(long bookId, String currentUserToken) {
         Cart cartForCurrentUser = getCart(currentUserToken);
-        List<Book> books;
-        books = cartForCurrentUser.getBooks();
+        Set<Book> books = cartForCurrentUser.getBooks();
         Book addedBook = bookService.findById(bookId);
-        books.add(addedBook);
+        if(notPurchasedByUser(addedBook, currentUserToken)) {
+            books.add(addedBook);
+        }
         cartRepository.save(cartForCurrentUser);
         return cartMapper.entityToResponse(cartForCurrentUser);
     }
@@ -66,11 +69,18 @@ public class CartService {
     @Transactional
     public CartResponseDto addToCartBatch(List<Long> bookIds, String currentUserToken) {
         Cart cartForCurrentUser = getCart(currentUserToken);
-        List<Book> books = cartForCurrentUser.getBooks();
-        List<Book> addedBooks = bookService.findByIdList(bookIds);
-        books.addAll(addedBooks);
+        Set<Book> books = cartForCurrentUser.getBooks();
+        Set<Book> addedBooks = bookService.findByIdList(bookIds);
+        List<Book> newBooks = addedBooks.stream()
+                .filter(book -> notPurchasedByUser(book, currentUserToken))
+                .collect(Collectors.toList());
+        books.addAll(newBooks);
         cartRepository.save(cartForCurrentUser);
         return cartMapper.entityToResponse(cartForCurrentUser);
+    }
+
+    private boolean notPurchasedByUser(Book book, String currentUserToken) {
+        return !orderService.findPurchasedBooksForCurrentUser(currentUserToken).contains(book);
     }
 
     private Cart getCart(String currentUserToken) {

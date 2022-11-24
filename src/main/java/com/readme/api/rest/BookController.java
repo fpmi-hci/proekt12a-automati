@@ -4,6 +4,7 @@ package com.readme.api.rest;
 import com.readme.api.db.entity.Book;
 import com.readme.api.rest.dto.BookContent;
 import com.readme.api.rest.dto.BookRequestDto;
+import com.readme.api.rest.dto.BookResponseDto;
 import com.readme.api.service.BookService;
 import com.readme.api.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -45,8 +47,9 @@ public class BookController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getById(@PathVariable("id") long id){
-        Book book = bookService.findById(id);
+    public ResponseEntity<BookResponseDto> getById(@PathVariable("id") long id,
+                                     @RequestHeader("Authorization") String currentUserToken){
+        BookResponseDto book = bookService.findByIdFull(id, currentUserToken);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
@@ -80,8 +83,8 @@ public class BookController {
     }
 
     @GetMapping("/purchased")
-    public ResponseEntity<List<Book>> getPurchasedBooks(@RequestHeader("Authorization") String currentUserToken) {
-        List<Book> books = orderService.findPurchasedBooksForCurrentUser(currentUserToken);
+    public ResponseEntity<Set<Book>> getPurchasedBooks(@RequestHeader("Authorization") String currentUserToken) {
+        Set<Book> books = orderService.findPurchasedBooksForCurrentUser(currentUserToken);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 

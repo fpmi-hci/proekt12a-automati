@@ -12,17 +12,9 @@ public class SearchParams {
 
     private int pageSize = 1000;
 
-    private List<SearchEntry> bookSearchParams;
+    private String searchString;
 
-    private List<SearchEntry> authorSearchParams;
-
-    private List<SearchEntry> genreSearchParams;
+    private SearchType searchType;
 
     private String sortDirection = "asc";
-
-    private String sortField = "id";
-
-    private String sortTable = "book";
-
-
 }

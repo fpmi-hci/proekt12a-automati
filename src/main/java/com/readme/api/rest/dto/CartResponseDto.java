@@ -9,7 +9,5 @@ import java.util.List;
 public class CartResponseDto {
     private long id;
 
-    private UserDto user;
-
     private List<Book> books;
 }
