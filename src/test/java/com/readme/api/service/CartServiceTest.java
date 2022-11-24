@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +43,8 @@ class CartServiceTest {
 
     @Mock
     private CartMapper cartMapper;
+    @Mock
+    private OrderService orderService;
 
     @Test
     public void shouldGetCarForCurrentUserIfAlreadyExists() {
@@ -96,6 +99,7 @@ class CartServiceTest {
         CartResponseDto resp = new CartResponseDto();
         resp.setBooks(Collections.singletonList(testBook));
         when(cartMapper.entityToResponse(any())).thenReturn(resp);
+        when(orderService.findPurchasedBooksForCurrentUser(anyString())).thenReturn(new HashSet<>());
 
         CartResponseDto cart = cartService.addToCart(bookId, USER_TOKEN);
         assertEquals(cart.getBooks(), Collections.singletonList(testBook));
@@ -104,6 +108,7 @@ class CartServiceTest {
         verify(userService).findUserByToken(USER_TOKEN);
         verify(cartRepository).findByUserId(USER_ID);
         verify(bookService).findById(bookId);
+        verify(orderService).findPurchasedBooksForCurrentUser(USER_TOKEN);
     }
 
     @Test
@@ -115,7 +120,7 @@ class CartServiceTest {
         Book testBook = new Book();
         testBook.setId(bookId);
         Cart testCart = new Cart();
-        testCart.setBooks(Collections.singletonList(testBook));
+        testCart.setBooks(Collections.singleton(testBook));
         when(cartRepository.findByUserId(anyLong())).thenReturn(Optional.of(testCart));
         when(cartMapper.entityToResponse(any())).thenReturn(new CartResponseDto());
 
