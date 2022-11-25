@@ -1,5 +1,6 @@
 package com.readme.api.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -44,7 +46,11 @@ public class Book {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_authors",
+            inverseJoinColumns = @JoinColumn(name = "author_id"),
+            joinColumns = @JoinColumn(name = "book_id"))
     private List<Author> authors;
 
 

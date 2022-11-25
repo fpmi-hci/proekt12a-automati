@@ -6,11 +6,8 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -27,12 +24,8 @@ public class Author {
     @Column(name = "full_name")
     private String fullName;
 
-    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinTable(
-            name = "book_authors",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @ManyToMany(mappedBy = "authors")
     private List<Book> books;
 
 }

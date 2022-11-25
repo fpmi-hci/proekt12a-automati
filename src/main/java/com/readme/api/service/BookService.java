@@ -2,8 +2,11 @@ package com.readme.api.service;
 
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
+import com.readme.api.db.entity.Author;
 import com.readme.api.db.entity.Book;
+import com.readme.api.db.entity.Genre;
 import com.readme.api.db.entity.User;
+import com.readme.api.db.entity.UserOrder;
 import com.readme.api.db.repository.BookRepository;
 import com.readme.api.db.repository.BookSearchRepository;
 import com.readme.api.db.repository.OrderRepository;
@@ -81,6 +84,8 @@ public class BookService {
         BigDecimal cost = requestBook.getCost();
         String title = requestBook.getTitle();
         String description = requestBook.getDescription();
+        List<Author> authors = book.getAuthors();
+        List<Genre> genres = book.getGenres();
         String imageUrl = requestBook.getImageUrl();
         if (imageUrl != null) {
             bookToUpdate.setImageUrl(imageUrl);
@@ -93,6 +98,12 @@ public class BookService {
         }
         if (description != null) {
             bookToUpdate.setDescription(description);
+        }
+        if(authors != null && !authors.isEmpty()){
+            bookToUpdate.setAuthors(authors);
+        }
+        if(genres != null && !genres.isEmpty()){
+            bookToUpdate.setGenres(genres);
         }
         return bookRepository.save(bookToUpdate);
     }
@@ -144,8 +155,8 @@ public class BookService {
     }
 
     private boolean bookPurchasedByUser(Book book, User currentUser) {
-        Set<Book> userBooks = orderRepository.findByUserId(currentUser.getId()).get().getBooks();
-        return userBooks.contains(book);
+        Optional<UserOrder> userOrder = orderRepository.findByUserId(currentUser.getId());
+        return userOrder.map(order -> order.getBooks().contains(book)).orElse(false);
     }
 
 }
