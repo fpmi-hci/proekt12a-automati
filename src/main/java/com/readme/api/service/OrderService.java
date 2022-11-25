@@ -40,6 +40,7 @@ public class OrderService {
             oldBooks.addAll(newBooks);
             return updatedOrder;
         }
+        order.setUser(userByToken);
         return orderRepository.save(order);
     }
 
@@ -75,7 +76,7 @@ public class OrderService {
 
     private void removeOrderBooksFromCart(Set<Book> books, long userId) {
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
-        if(optionalCart.isPresent()){
+        if (optionalCart.isPresent()) {
             Cart cart = optionalCart.get();
             cart.getBooks().removeAll(books);
         }
