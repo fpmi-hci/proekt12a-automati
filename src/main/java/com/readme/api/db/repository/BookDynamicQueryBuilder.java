@@ -4,6 +4,8 @@ import com.readme.api.rest.SearchParams;
 import com.readme.api.rest.SearchType;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Collectors;
+
 @Component
 public class BookDynamicQueryBuilder {
 
@@ -21,9 +23,13 @@ public class BookDynamicQueryBuilder {
 
     private static final String PAGING_PART = " LIMIT %d OFFSET %d";
 
-    private static final String SEARCH_PART = " WHERE %s LIKE '%%%s%%'";
+    private static final String SEARCH_PART = " WHERE %s ILIKE '%%%s%%'";
 
-    private static final String APPEND_DISJUNCTION = " OR %s LIKE '%%%s%%'";
+    private static final String APPEND_DISJUNCTION = " OR %s ILIKE '%%%s%%'";
+
+    private static final String SEARCH_BY_GENRE_APPEND = " AND g.id in (%s)";
+
+    private static final String SEARCH_BY_GENRE_ONLY = " WHERE g.id in (%s)";
 
     private static final String AUTHOR_SEARCH = "a.full_name";
 
@@ -41,6 +47,14 @@ public class BookDynamicQueryBuilder {
         } else if(searchType == SearchType.TITLE_OR_AUTHOR){
             sql.append(String.format(SEARCH_PART, BOOK_SEARCH, searchString));
             sql.append(String.format(APPEND_DISJUNCTION, AUTHOR_SEARCH, searchString));
+        }
+        if(searchParams.getGenres() != null){
+            String genresSearch = searchType == null ? SEARCH_BY_GENRE_ONLY : SEARCH_BY_GENRE_APPEND;
+            String genres = searchParams.getGenres()
+                    .stream()
+                    .map(id -> Long.toString(id))
+                    .collect(Collectors.joining(","));
+            sql.append(String.format(genresSearch, genres));
         }
 
         String sortDirection = searchParams.getSortDirection();

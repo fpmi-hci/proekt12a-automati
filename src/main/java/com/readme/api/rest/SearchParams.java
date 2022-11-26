@@ -12,6 +12,8 @@ public class SearchParams {
 
     private int pageSize = 1000;
 
+    private List<Long> genres;
+
     private String searchString;
 
     private SearchType searchType;
